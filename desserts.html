@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our natural dessert - Shop</title>
+    <style>
+        /* Base styles with fallback background */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            position: relative;
+            /*background-color: #f8fff8;  Fallback if video doesn't load */
+        }
+        
+        /* Video background container */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        /* Video styling */
+        .video-background video {
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+            opacity: 1; /* Better for readability */
+        }
+        
+        /* Overlay to improve readability */
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(248, 255, 248, 0.6); /* Light green tint */
+            z-index: -1;
+        }
+        
+        /* Content styles */
+        h1 {
+            color: #2e8b57;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1); /* Improves readability */
+        }
+        
+        .dessert-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .dessert-item {
+            background: rgba(255, 255, 255, 0.85); /* Slightly transparent */
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(5px); /* Frosted glass effect */
+        }
+        
+        .dessert-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Rest of your existing styles remain the same */
+        .dessert-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .dessert-item:hover {
+            transform: translateY(-5px);
+        }
+        .dessert-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .dessert-name {
+            font-weight: bold;
+            color: #2e8b57;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        .dessert-price {
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .quantity-btn {
+            background-color: #e0e0e0;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .quantity-input {
+            width: 40px;
+            text-align: center;
+            margin: 0 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 2px;
+        }
+        .add-to-cart {
+            background-color: #2e8b57;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: auto;
+            transition: background-color 0.3s;
+        }
+        .add-to-cart:hover {
+            background-color: #3aa76d;
+        }
+        .cart-summary {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        .cart-items {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .checkout-btn {
+            background-color: #2e8b57;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .checkout-btn:hover {
+            background-color: #3aa76d;
+        }
+        .back-button {
+            display: block;
+            text-align: center;
+            margin: 40px auto 20px;
+            background-color: #2e8b57;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 6px;
+            width: fit-content;
+            transition: all 0.3s;
+        }
+        .back-button:hover {
+            background-color: #3aa76d;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+      <!-- Add the video background section -->
+    <div class="video-background">
+        <video autoplay muted loop id="bgVideo">
+            <!-- Add multiple source formats for better browser compatibility -->
+            <source src="dessert.mp4" type="video/mp4">
+            
+        </video>
+    </div>
+    <div class="video-overlay"></div>
+    
+    <h1>Our Delicious dessert Collection</h1>
+    
+    <div class="dessert-list">
+        <div class="dessert-item">
+            <img src="cheese.jpg" alt="cheese" class="dessert-img">
+            <div class="dessert-name">Cheese cake</div>
+            <div class="dessert-price">$4.50/kg</div>
+            <div class="quantity-controls">
+                <button class="quantity-btn minus">-</button>
+                <input type="number" value="1" min="1" class="quantity-input">
+                <button class="quantity-btn plus">+</button>
+            </div>
+            <button class="add-to-cart" data-name="Tomatoes" data-price="4.50">Add to Cart</button>
+        </div>
+        
+        <div class="dessert-item">
+            <img src="redvelvet.jpg" alt="redvelvet" class="dessert-img">
+            <div class="dessert-name">redvelvet</div>
+            <div class="dessert-price">$3.20/kg</div>
+            <div class="quantity-controls">
+                <button class="quantity-btn minus">-</button>
+                <input type="number" value="1" min="1" class="quantity-input">
+                <button class="quantity-btn plus">+</button>
+            </div>
+            <button class="add-to-cart" data-name="Carrots" data-price="3.20">Add to Cart</button>
+        </div>
+        
+        <div class="dessert-item">
+            <img src="breadpudding.jpg" alt="breadpudding" class="dessert-img">
+            <div class="dessert-name">Bread pudding</div>
+            <div class="dessert-price">$5.75/kg</div>
+            <div class="quantity-controls">
+                <button class="quantity-btn minus">-</button>
+                <input type="number" value="1" min="1" class="quantity-input">
+                <button class="quantity-btn plus">+</button>
+            </div>
+            <button class="add-to-cart" data-name="Spinach" data-price="5.75">Add to Cart</button>
+        </div>
+        
+        <div class="dessert-item">
+            <img src="chocolate.jpg" alt="chocolate" class="dessert-img">
+            <div class="dessert-name">Chocolate</div>
+            <div class="dessert-price">$6.30/kg</div>
+            <div class="quantity-controls">
+                <button class="quantity-btn minus">-</button>
+                <input type="number" value="1" min="1" class="quantity-input">
+                <button class="quantity-btn plus">+</button>
+            </div>
+            <button class="add-to-cart" data-name="Beet Root" data-price="6.30">Add to Cart</button>
+        </div>
+        
+       <div class="dessert-item">
+            <img src="redvelvet.jpg" alt="redvelvet" class="dessert-img">
+            <div class="dessert-name">redvelvet</div>
+            <div class="dessert-price">$3.20/kg</div>
+            <div class="quantity-controls">
+                <button class="quantity-btn minus">-</button>
+                <input type="number" value="1" min="1" class="quantity-input">
+                <button class="quantity-btn plus">+</button>
+            </div>
+            <button class="add-to-cart" data-name="Carrots" data-price="3.20">Add to Cart</button>
+        </div>
+        
+       <div class="dessert-item">
+            <img src="breadpudding.jpg" alt="breadpudding" class="dessert-img">
+            <div class="dessert-name">Bread pudding</div>
+            <div class="dessert-price">$5.75/kg</div>
+            <div class="quantity-controls">
+                <button class="quantity-btn minus">-</button>
+                <input type="number" value="1" min="1" class="quantity-input">
+                <button class="quantity-btn plus">+</button>
+            </div>
+            <button class="add-to-cart" data-name="Spinach" data-price="5.75">Add to Cart</button>
+        </div>
+        
+       <div class="dessert-item">
+            <img src="cheese.jpg" alt="cheese" class="dessert-img">
+            <div class="dessert-name">Cheese cake</div>
+            <div class="dessert-price">$4.50/kg</div>
+            <div class="quantity-controls">
+                <button class="quantity-btn minus">-</button>
+                <input type="number" value="1" min="1" class="quantity-input">
+                <button class="quantity-btn plus">+</button>
+            </div>
+            <button class="add-to-cart" data-name="Tomatoes" data-price="4.50">Add to Cart</button>
+        </div>
+        
+        <div class="dessert-item">
+            <img src="chocolate.jpg" alt="chocolate" class="dessert-img">
+            <div class="dessert-name">Chocolate</div>
+            <div class="dessert-price">$6.30/kg</div>
+            <div class="quantity-controls">
+                <button class="quantity-btn minus">-</button>
+                <input type="number" value="1" min="1" class="quantity-input">
+                <button class="quantity-btn plus">+</button>
+            </div>
+            <button class="add-to-cart" data-name="Beet Root" data-price="6.30">Add to Cart</button>
+        </div>
+    
+    <div class="cart-summary">
+        <h3>Your Cart (<span id="cart-count">0</span>)</h3>
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be added here dynamically -->
+        </div>
+        <div>Total: $<span id="cart-total">0.00</span></div>
+        <button class="checkout-btn">Proceed to Checkout</button>
+    </div>
+    
+    <a href="index.html" class="back-button">Back to Home</a>
+
+    <script>
+         // Optional: Play the video automatically (most browsers require muted autoplay)
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('bgVideo');
+            video.play().catch(e => console.log("Autoplay prevented:", e));
+        });
+        // Cart functionality
+        let cart = [];
+        
+        // Quantity controls
+        document.querySelectorAll('.quantity-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('.quantity-input');
+                let value = parseInt(input.value);
+                
+                if (this.classList.contains('minus') && value > 1) {
+                    input.value = value - 1;
+                } else if (this.classList.contains('plus')) {
+                    input.value = value + 1;
+                }
+            });
+        });
+        
+        // Add to cart
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const name = this.getAttribute('data-name');
+                const price = parseFloat(this.getAttribute('data-price'));
+                const quantity = parseInt(this.parentElement.querySelector('.quantity-input').value);
+                
+                // Check if item already in cart
+                const existingItem = cart.find(item => item.name === name);
+                
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                } else {
+                    cart.push({ name, price, quantity });
+                }
+                
+                updateCart();
+            });
+        });
+        
+        // Update cart display
+        function updateCart() {
+            const cartItemsElement = document.getElementById('cart-items');
+            const cartCountElement = document.getElementById('cart-count');
+            const cartTotalElement = document.getElementById('cart-total');
+            
+            // Clear cart display
+            cartItemsElement.innerHTML = '';
+            
+            // Update with current items
+            let total = 0;
+            let count = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                count += item.quantity;
+                
+                const itemElement = document.createElement('div');
+                itemElement.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span>${item.name} (${item.quantity}kg)</span>
+                        <span>$${itemTotal.toFixed(2)}</span>
+                    </div>
+                `;
+                cartItemsElement.appendChild(itemElement);
+            });
+            
+            cartCountElement.textContent = count;
+            cartTotalElement.textContent = total.toFixed(2);
+        }
+        
+        // Checkout button
+        document.querySelector('.checkout-btn').addEventListener('click', function() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+            } else {
+                alert(`Order placed successfully! Total: $${document.getElementById('cart-total').textContent}`);
+                cart = [];
+                updateCart();
+            }
+        });
+
+    </script>
+</body>
+</html>
